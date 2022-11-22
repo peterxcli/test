@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  local:
+    restart: always
+    container_name: local
+    volumes:
+      - .:/app
+    build: .
+    ports:
+      - "7980:7980"
+    depends_on:
+      - mongo
+  
+  dev:
+    restart: always
+    container_name: dev
+    volumes:
+      - /app/node_modules
+    image: registry.gitlab.com/peterxcli/swavey-backend/dev:latest
+    ports:
+      - "7980:7980"
+    depends_on:
+      - mongo 
+
+  prod:
+    container_name: prod
+    image: registry.gitlab.com/peterxcli/swavey-backend/prod:latest
+    volumes:
+      - /app/node_modules
+    ports:
+      - "7980:7980"
+    depends_on:
+      - mongo
+    tty: true
+    stdin_open: true
+    restart: always
+
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"

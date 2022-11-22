@@ -1,0 +1,8 @@
+.idea
+**/node_modules
+data
+yarn.lock
+package-lock.json
+src
+.env
+run.ps1
