@@ -1,13 +1,33 @@
-name: learn-github-actions
-# run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+# A workflow template for Angular project
+
+name: CI
+
+# the placeholder `$default-branch` will be automatically replaced with
+# the name of the repository's default branch, e.g. main
+on:
+  [push]
+
 jobs:
-  check-bats-version:
+  test:
+    name: Test and Build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [10.x]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v2
         with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run start
+
+      - name: Test
+        run: npm test
