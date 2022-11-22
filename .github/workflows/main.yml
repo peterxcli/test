@@ -1,36 +1,13 @@
-# A workflow template for Angular project
-
-name: CI
-
-# the placeholder `$default-branch` will be automatically replaced with
-# the name of the repository's default branch, e.g. main
-on:
-  push:
-    branches: [$default-branch]
-  pull_request:
-    branches: [$default-branch]
-
+name: learn-github-actions
+# run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
 jobs:
-  test:
-    name: Test and Build
+  check-bats-version:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [10.x]
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Lint
-        run: npm run start
-
-      - name: Test
-        run: npm test
+          node-version: '14'
+      - run: npm install -g bats
+      - run: bats -v
