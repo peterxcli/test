@@ -9,8 +9,12 @@ on:
 
 jobs:
   test:
+  
     name: Test and Build
     runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:latest
     strategy:
       matrix:
         node: [16.x]
@@ -26,8 +30,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Lint
-        run: npm run start
-
       - name: Test
         run: npm test
+
+      - name: Build
+        run: docker build .
